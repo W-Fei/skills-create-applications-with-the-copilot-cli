@@ -109,7 +109,7 @@ async function main() {
 
     if (operator === "sqrt") {
       const result = calculate(num1, operator);
-      console.log(`\nResult: sqrt ${num1} = ${result}`);
+      console.log(`\nResult: sqrt(${num1}) = ${result}`);
     } else {
       const secondNum = await ask("Enter second number: ");
       const num2 = parseFloat(secondNum);
