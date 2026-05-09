@@ -44,6 +44,27 @@ function divide(a, b) {
   return a / b;
 }
 
+// Modulo: returns the remainder of a divided by b
+function modulo(a, b) {
+  if (b === 0) {
+    return "Error: Modulo by zero";
+  }
+  return a % b;
+}
+
+// Power: returns a raised to the power of b
+function power(a, b) {
+  return Math.pow(a, b);
+}
+
+// Square root: returns the square root of a
+function sqrt(a) {
+  if (a < 0) {
+    return "Error: Square root of negative number";
+  }
+  return Math.sqrt(a);
+}
+
 function calculate(a, operator, b) {
   switch (operator) {
     case "+":
@@ -54,8 +75,14 @@ function calculate(a, operator, b) {
       return multiply(a, b);
     case "/":
       return divide(a, b);
+    case "%":
+      return modulo(a, b);
+    case "^":
+      return power(a, b);
+    case "sqrt":
+      return sqrt(a);
     default:
-      return "Error: Invalid operator. Use +, -, *, or /";
+      return "Error: Invalid operator. Use +, -, *, /, %, ^, or sqrt";
   }
 }
 
@@ -98,7 +125,7 @@ async function main() {
 }
 
 // Export functions for testing
-module.exports = { add, subtract, multiply, divide, calculate };
+module.exports = { add, subtract, multiply, divide, modulo, power, sqrt, calculate };
 
 // Run CLI only when executed directly
 if (require.main === module) {
