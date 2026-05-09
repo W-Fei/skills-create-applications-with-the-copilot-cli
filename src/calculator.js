@@ -8,6 +8,9 @@
  *   - Subtraction    – subtracts the second number from the first
  *   * Multiplication – multiplies two numbers
  *   / Division       – divides the first number by the second (with division-by-zero handling)
+ *   % Modulo         – returns the remainder of dividing the first number by the second
+ *   ^ Power          – raises the first number to the second number's power
+ *   sqrt             – returns the square root of a number (with negative-number handling)
  */
 
 const readline = require("readline");
@@ -44,6 +47,27 @@ function divide(a, b) {
   return a / b;
 }
 
+// Modulo: returns the remainder of a and b, handles modulo by zero
+function modulo(a, b) {
+  if (b === 0) {
+    return "Error: Modulo by zero";
+  }
+  return a % b;
+}
+
+// Power: returns base raised to exponent
+function power(base, exponent) {
+  return base ** exponent;
+}
+
+// Square root: returns square root of n, handles negative input
+function squareRoot(n) {
+  if (n < 0) {
+    return "Error: Square root of negative number";
+  }
+  return Math.sqrt(n);
+}
+
 function calculate(a, operator, b) {
   switch (operator) {
     case "+":
@@ -54,15 +78,21 @@ function calculate(a, operator, b) {
       return multiply(a, b);
     case "/":
       return divide(a, b);
+    case "%":
+      return modulo(a, b);
+    case "^":
+      return power(a, b);
+    case "sqrt":
+      return squareRoot(a);
     default:
-      return "Error: Invalid operator. Use +, -, *, or /";
+      return "Error: Invalid operator. Use +, -, *, /, %, ^, or sqrt";
   }
 }
 
 async function main() {
   console.log("===================================");
   console.log("  Node.js CLI Calculator");
-  console.log("  Operations: + - * /");
+  console.log("  Operations: + - * / % ^ sqrt");
   console.log("===================================");
 
   let running = true;
@@ -75,17 +105,22 @@ async function main() {
       continue;
     }
 
-    const operator = await ask("Enter operator (+, -, *, /): ");
+    const operator = (await ask("Enter operator (+, -, *, /, %, ^, sqrt): ")).trim();
 
-    const secondNum = await ask("Enter second number: ");
-    const num2 = parseFloat(secondNum);
-    if (isNaN(num2)) {
-      console.log("Error: Invalid number.");
-      continue;
+    if (operator === "sqrt") {
+      const result = calculate(num1, operator);
+      console.log(`\nResult: sqrt ${num1} = ${result}`);
+    } else {
+      const secondNum = await ask("Enter second number: ");
+      const num2 = parseFloat(secondNum);
+      if (isNaN(num2)) {
+        console.log("Error: Invalid number.");
+        continue;
+      }
+
+      const result = calculate(num1, operator, num2);
+      console.log(`\nResult: ${num1} ${operator} ${num2} = ${result}`);
     }
-
-    const result = calculate(num1, operator.trim(), num2);
-    console.log(`\nResult: ${num1} ${operator.trim()} ${num2} = ${result}`);
 
     const again = await ask("\nCalculate again? (y/n): ");
     if (again.trim().toLowerCase() !== "y") {
@@ -98,7 +133,16 @@ async function main() {
 }
 
 // Export functions for testing
-module.exports = { add, subtract, multiply, divide, calculate };
+module.exports = {
+  add,
+  subtract,
+  multiply,
+  divide,
+  modulo,
+  power,
+  squareRoot,
+  calculate,
+};
 
 // Run CLI only when executed directly
 if (require.main === module) {

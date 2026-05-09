@@ -1,4 +1,13 @@
-const { add, subtract, multiply, divide, calculate } = require("../calculator");
+const {
+  add,
+  subtract,
+  multiply,
+  divide,
+  modulo,
+  power,
+  squareRoot,
+  calculate,
+} = require("../calculator");
 
 // ============================================================
 // Tests based on image examples: 2+3, 10-4, 45*2, 20/5
@@ -9,6 +18,9 @@ describe("Image example operations", () => {
   test("10 - 4 = 6", () => expect(subtract(10, 4)).toBe(6));
   test("45 * 2 = 90", () => expect(multiply(45, 2)).toBe(90));
   test("20 / 5 = 4", () => expect(divide(20, 5)).toBe(4));
+  test("10 % 3 = 1", () => expect(modulo(10, 3)).toBe(1));
+  test("2 ^ 3 = 8", () => expect(power(2, 3)).toBe(8));
+  test("sqrt(16) = 4", () => expect(squareRoot(16)).toBe(4));
 });
 
 // ============================================================
@@ -157,6 +169,60 @@ describe("divide()", () => {
 });
 
 // ============================================================
+// Modulo tests
+// ============================================================
+
+describe("modulo()", () => {
+  test("returns remainder for positive numbers", () => {
+    expect(modulo(10, 3)).toBe(1);
+  });
+
+  test("returns zero when divisible", () => {
+    expect(modulo(20, 5)).toBe(0);
+  });
+
+  test("returns error string for modulo by zero", () => {
+    expect(modulo(10, 0)).toBe("Error: Modulo by zero");
+  });
+});
+
+// ============================================================
+// Power tests
+// ============================================================
+
+describe("power()", () => {
+  test("raises number to positive exponent", () => {
+    expect(power(2, 3)).toBe(8);
+  });
+
+  test("handles zero exponent", () => {
+    expect(power(5, 0)).toBe(1);
+  });
+
+  test("handles negative exponent", () => {
+    expect(power(2, -2)).toBe(0.25);
+  });
+});
+
+// ============================================================
+// Square root tests
+// ============================================================
+
+describe("squareRoot()", () => {
+  test("returns square root for positive number", () => {
+    expect(squareRoot(25)).toBe(5);
+  });
+
+  test("returns 0 for square root of 0", () => {
+    expect(squareRoot(0)).toBe(0);
+  });
+
+  test("returns error string for negative number", () => {
+    expect(squareRoot(-9)).toBe("Error: Square root of negative number");
+  });
+});
+
+// ============================================================
 // calculate() dispatcher tests
 // ============================================================
 
@@ -177,13 +243,33 @@ describe("calculate()", () => {
     expect(calculate(20, "/", 5)).toBe(4);
   });
 
+  test("dispatches modulo", () => {
+    expect(calculate(10, "%", 3)).toBe(1);
+  });
+
+  test("dispatches power", () => {
+    expect(calculate(2, "^", 4)).toBe(16);
+  });
+
+  test("dispatches square root", () => {
+    expect(calculate(81, "sqrt")).toBe(9);
+  });
+
+  test("handles modulo by zero through calculate", () => {
+    expect(calculate(5, "%", 0)).toBe("Error: Modulo by zero");
+  });
+
+  test("handles square root of negative number through calculate", () => {
+    expect(calculate(-1, "sqrt")).toBe("Error: Square root of negative number");
+  });
+
   test("handles division by zero through calculate", () => {
     expect(calculate(5, "/", 0)).toBe("Error: Division by zero");
   });
 
   test("returns error for invalid operator", () => {
-    expect(calculate(1, "%", 2)).toBe(
-      "Error: Invalid operator. Use +, -, *, or /"
+    expect(calculate(1, "&", 2)).toBe(
+      "Error: Invalid operator. Use +, -, *, /, %, ^, or sqrt"
     );
   });
 });
